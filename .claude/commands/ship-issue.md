@@ -57,6 +57,14 @@ Given GitHub issue number as an argument, perform the complete workflow to close
    - Merge the PR using `gh pr merge {pr_number} --squash` or `--merge` (check repo settings for preferred strategy)
    - Confirm the issue is automatically closed
 
+8. **Clean Up**
+   - Get the default branch name: `gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'`
+   - Switch back to the default branch: `git checkout {default_branch}`
+   - Pull the latest changes including the merge: `git pull`
+   - Verify the changes are present with `git log -1` or `git show HEAD`
+   - Delete the local feature branch: `git branch -d {branch_name}`
+   - Delete the remote feature branch: `git push origin --delete {branch_name}`
+
 ## Error Handling
 
 - If there are no pending changes, inform the user
@@ -64,6 +72,8 @@ Given GitHub issue number as an argument, perform the complete workflow to close
 - If the branch already exists, ask user how to proceed
 - If PR creation fails, provide the error details
 - Do not proceed with merge if there are conflicts or failing checks
+- If branch deletion fails (e.g., branch not fully merged), report the error and ask user how to proceed
+- If pulling changes fails due to conflicts, report the error
 
 ## Important Notes
 
